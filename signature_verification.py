@@ -10,8 +10,14 @@ ctk.set_widget_scaling(1.5)
 root = ctk.CTk()
 root.geometry = ('500x700')
 root.title = ('Signature Verificaton System')
-def button0_command():
-    pass
+
+def button0_command():#extract  300*300
+    try:
+        filename = ctk.filedialog.askopenfilename()
+        extract_signature_from_image(filename, (300,300),15, folder_given = True,save_folder = './data/extracted_signatures')
+        messagebox.showinfo('','Extraction Complete')
+    except Exception as e:
+        messagebox.showwarning('Error occured',f'{e}')
 
 def button1_command():# train model
     
