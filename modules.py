@@ -9,8 +9,12 @@ from keras.callbacks import EarlyStopping
 import itertools
 from PIL import Image
 
-def extract_data_from_cheque(cheque_path :str)->None:
-    folder_path = os.path.dirname(cheque_path)
+def extract_data_from_cheque(cheque_path :str, save_path, folder_given : False)->None:
+    if folder_given is False:
+       save_path = os.path.dirname(cheque_path)
+
+    folder_path = os.path.join(save_path,'extracted_cheque_details')
+    
     cheque = cv2.imread(cheque_path)
     ch_size = (1494,700)
 
