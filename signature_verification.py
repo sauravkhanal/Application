@@ -50,8 +50,37 @@ def button2_command():# extract cheque
     messagebox.showinfo('','Extraction completed')
 
 
-def button3_command():
-    pass
+def test_model_selection(trained_model_name):
+
+    button3.grid_remove()
+
+    ctk.CTkLabel(root,text = 'Select user to test').grid(row = 4, column = 1)
+
+    trained_model_path = os.path.join('./data/trained_model',trained_model_name)
+
+    reference_image = os.path.join('./data/signature/train',trained_model_name.split('vs')[0],'sign1.png')
+
+    if os.path.isfile(reference_image) is False:
+        messagebox.showwarning('file not found', 'path: ' + reference_image)
+
+    image_to_test = ctk.filedialog.askopenfilename()
+
+    output = predict(trained_model_path,reference_image,image_to_test)
+    messagebox.showinfo('Accuracy',f'The similarity of signature is: {output}')
+
+
+
+def button3_command(): # test signature
+
+    file_list = os.listdir('./data/trained_model')
+    option_box = ctk.CTkOptionMenu(root,
+                                values = file_list,
+                                button_color='green',
+                                button_hover_color='blue',
+                                fg_color='grey' ,
+                                command= test_model_selection
+                                )
+    option_box.grid(row = 3 , column = 1, pady = 10)
 
 
 
@@ -80,11 +109,22 @@ button4 = ctk.CTkButton(root,
                         command = root.quit
                         )
 
-button0.pack(padx=0, pady=5)
-button1.pack(padx=0, pady=5)
-button2.pack(padx=0, pady=5)
-button3.pack(padx=0, pady=5)
-button4.pack(padx=0, pady=5)
+
+
+button0.grid(padx=0, pady=5, row = 0 , column = 1 )
+button1.grid(padx=0, pady=5, row = 1 , column = 1 )
+button2.grid(padx=0, pady=5, row = 2 , column = 1 )
+button3.grid(padx=0, pady=5, row = 4 , column = 1 )
+button4.grid(padx=0, pady=5, row = 5 , column = 1 )
+
+
+
+# ctk.CTkOptionMenu(master=root, values= lis).grid(row = 4, column = 2)
+
+# lb = tk.Listbox(root)
+# for i, items in enumerate(lis):
+#     lb.insert(i,items)
+# lb.grid(row=4, column=0 )
 
 def directory_not_found_popup(directory_path:str):
     messagebox.showwarning('Path error', f'{directory_path} not found')
