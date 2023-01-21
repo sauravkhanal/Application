@@ -62,13 +62,17 @@ def extract_data_from_cheque(cheque_path :str)->None:
     cv2.imwrite(f"{folder_path}/y2.png",y2)
     cv2.imwrite(f"{folder_path}/y3.png",y3)
 
-def extract_signature_from_image(image_path : str ,size:tuple= (300,300),margin:int = 15):
+def extract_signature_from_image(image_path : str ,size:tuple= (300,300),margin:int = 15, folder_given:bool =False, save_folder :str = './data/extracted_signatures'):
     image_name = os.path.basename(image_path)
     image_name = image_name.split('.')[0]
-    save_path = os.path.join(os.path.split(image_path)[0], f"extracted_from_{image_name}")
-    if os.path.isdir(save_path) is False: #split at . to remove .png extension from folder name
-        os.makedirs(save_path)
-        #dir_made = True
+    if folder_given is False:
+        save_path = os.path.join(os.path.split(image_path)[0], f"extracted_from_{image_name}")
+
+    elif folder_given is True:
+       save_path = os.path.join(save_folder,f"extracted_from_{image_name}")
+
+    if os.path.isdir(save_path) is False:
+       os.makedirs(save_path)
     
     signature_grid = cv2.imread(image_path,cv2.IMREAD_GRAYSCALE)
     signature_grid = cv2.resize(signature_grid,(size[0]*5,size[0]*7))
