@@ -44,8 +44,11 @@ def button1_command():# train model
 
     messagebox.showinfo('Training completes',f'Model saved as: .data/trained_model/{model_name}.h5')
 
-def button2_command():
-    pass
+def button2_command():# extract cheque
+    filename = ctk.filedialog.askopenfilename()
+    extract_data_from_cheque(filename,save_path='./data', folder_given = True)
+    messagebox.showinfo('','Extraction completed')
+
 
 def button3_command():
     pass
@@ -79,6 +82,7 @@ button4 = ctk.CTkButton(root,
 
 button0.pack(padx=0, pady=5)
 button1.pack(padx=0, pady=5)
+button2.pack(padx=0, pady=5)
 button3.pack(padx=0, pady=5)
 button4.pack(padx=0, pady=5)
 
