@@ -21,25 +21,29 @@ def button0_command():#extract  300*300
             image_name = os.path.basename(filename)
             image_name = image_name.split('.')[0]
             save_path = f'./data/extracted_signatures/extracted_from_{image_name}'
+            save_path =  os.path.abspath(save_path)
 
-            if os.path.isdir(save_path) is False:
-                os.makedirs(save_path)
+            try:
+                if os.path.isdir(save_path) is False:
+                    os.makedirs(save_path)
+            except Exception as e:
+                print(f"Couldn't make directory: {save_path}\n error : {e}")
+                
         else:
             save_path = ctk.filedialog.askdirectory()
 
         return_path = extract_signature_from_image(filename, size=(300,300),margin = 15,
                                                  save_path=save_path)
         
-        messagebox.showinfo('Extraction Complete', f'Image saved at : {os.path.abspath(return_path)}')
-        os.startfile(os.path.abspath(return_path))
-        
+        messagebox.showinfo('Extraction Complete', f'Image saved at : {return_path}')
+        os.startfile(return_path)
+
     except Exception as e:
          messagebox.showwarning('Error occured',f'{e}')
 
 def button1_command():# train model
     
-    image_dir_0 = ctk.filedialog.askdirectory(
-                                           )
+    image_dir_0 = ctk.filedialog.askdirectory()
     
     image_dir_1 = './data/signature/train/99'
 
