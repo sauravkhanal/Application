@@ -66,18 +66,22 @@ def extract_data_from_cheque(cheque_path :str, save_path, folder_given : False)-
     cv2.imwrite(f"{folder_path}/y2.png",y2)
     cv2.imwrite(f"{folder_path}/y3.png",y3)
 
-def extract_signature_from_image(image_path : str ,size:tuple= (300,300),margin:int = 15, folder_given:bool =False, save_folder :str = './data/extracted_signatures'):
-    image_name = os.path.basename(image_path)
-    image_name = image_name.split('.')[0]
-    if folder_given is False:
-        save_path = os.path.join(os.path.split(image_path)[0], f"extracted_from_{image_name}")
+def extract_signature_from_image(image_path : str ,save_path ,size:tuple= (300,300),margin:int = 15) -> str:
 
-    elif folder_given is True:
-       save_path = os.path.join(save_folder,f"extracted_from_{image_name}")
+    # image_name = os.path.basename(image_path)
 
-    if os.path.isdir(save_path) is False:
-       os.makedirs(save_path)
+    # image_name = image_name.split('.')[0]
+
+    # if folder_given is False:
+    #     save_path = os.path.join(os.path.dirname(image_path), f"extracted_from_{image_name}")
+    # elif folder_given is True:
+    #    save_path = os.path.join(folder_given,f"extracted_from_{image_name}")
+
+    # if os.path.isdir(save_path) is False:
+    #    os.makedirs(save_path)
     
+       
+
     signature_grid = cv2.imread(image_path,cv2.IMREAD_GRAYSCALE)
     signature_grid = cv2.resize(signature_grid,(size[0]*5,size[0]*7))
 
@@ -130,7 +134,9 @@ def extract_signature_from_image(image_path : str ,size:tuple= (300,300),margin:
         x = xo #reset x to the leftmost border
 
         y = y + height #increment y to next row
-    preprocess_single_folder(save_path,save_path)
+    #preprocess_single_folder(save_path,save_path)
+
+    return save_path
 
 def preprocess_single_folder(folder_path,save_folder_path, final_img_size = (200,200), power_law=False, segment=True, log_transform=False):
   image_batch = os.listdir(folder_path)

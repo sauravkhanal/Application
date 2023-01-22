@@ -14,10 +14,27 @@ root.title = ('Signature Verificaton System')
 def button0_command():#extract  300*300
     try:
         filename = ctk.filedialog.askopenfilename()
-        extract_signature_from_image(filename, (300,300),15, folder_given = True,save_folder = './data/extracted_signatures')
-        messagebox.showinfo('','Extraction Complete')
+
+        save_in_custom_folder = messagebox.askyesno('','Do you want to save in custom folder?')
+
+        if save_in_custom_folder is False:
+            image_name = os.path.basename(filename)
+            image_name = image_name.split('.')[0]
+            save_path = f'./data/extracted_signatures/extracted_from_{image_name}'
+
+            if os.path.isdir(save_path) is False:
+                os.makedirs(save_path)
+        else:
+            save_path = ctk.filedialog.askdirectory()
+
+        return_path = extract_signature_from_image(filename, size=(300,300),margin = 15,
+                                                 save_path=save_path)
+        
+        messagebox.showinfo('Extraction Complete', f'Image saved at : {os.path.abspath(return_path)}')
+        os.startfile(os.path.abspath(return_path))
+        
     except Exception as e:
-        messagebox.showwarning('Error occured',f'{e}')
+         messagebox.showwarning('Error occured',f'{e}')
 
 def button1_command():# train model
     
@@ -34,7 +51,7 @@ def button1_command():# train model
                                                title = 'Please select a directory of signature class 2')
         
     messagebox.showinfo('',"Model is training\nEstimated time : 150 seconds")
-    model = train_model(image_dir_0, image_dir_1)
+    model = train_model(image_dir_0, image_dir_1,num_epochs=5)
 
     check_and_create_dir('.data/trained_model')
 
