@@ -3,6 +3,28 @@ import customtkinter as ctk
 import tkinter as tk
 from tkinter import messagebox
 
+
+'''
+remaining task:
+make all features computer independent ,
+first check if .data/needed_file exists 
+if no, popup that file doesn't exist and open select file
+after operation is complete show file location and open it 
+(can add radio button to show file locations or not automatically)
+
+It may be difficult to add console 
+if difficult make exe with a console
+
+Theory is most important 
+
+MUST UNDERSTAND ALL THE CONCEPTS CLEARLY
+WHY THIS MODEL 
+WHY THIS ARHITECTURE 
+WHAT DOES THIS LOSS FUNCTION DO?
+
+
+'''
+
 ctk.set_appearance_mode('system')
 ctk.set_default_color_theme('dark-blue')
 ctk.set_widget_scaling(1.5)
