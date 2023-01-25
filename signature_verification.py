@@ -37,9 +37,10 @@ def button0_command():#extract  300*300
     try:
         filename = ctk.filedialog.askopenfilename()
 
-        save_in_custom_folder = messagebox.askyesno('','Do you want to save in custom folder?')
+        #save_in_custom_folder = messagebox.askyesno('','Do you want to save in custom folder?')
+        dir = './data'
 
-        if save_in_custom_folder is False:
+        if os.path.isdir(dir) is True:
             image_name = os.path.basename(filename)
             image_name = image_name.split('.')[0]
             save_path = f'./data/extracted_signatures/extracted_from_{image_name}'
@@ -52,6 +53,7 @@ def button0_command():#extract  300*300
                 print(f"Couldn't make directory: {save_path}\n error : {e}")
                 
         else:
+            messagebox.showinfo("","Default save directory not found\n Please select a save directory")
             save_path = ctk.filedialog.askdirectory()
 
         return_path = extract_signature_from_image(filename, size=(300,300),margin = 15,
@@ -66,26 +68,45 @@ def button0_command():#extract  300*300
 def button1_command():# train model
     
     image_dir_0 = ctk.filedialog.askdirectory()
-    
+
     image_dir_1 = './data/signature/train/99'
-
-    if os.path.isdir(image_dir_1) is False:
-        directory_not_found_popup(image_dir_1)
-
-        image_dir_1 = ctk.filedialog.askdirectory(root,
-                                               initialdir='./',
-                                               title = 'Please select a directory of signature class 2')
+    untrained_model_path = './data/untrained_model.h5'
+    
+    # if os.path.isdir(os.path.abspath('./data')) is False:
+    #     messagebox.showerror('Data folder notfound','Please select data folder')
+    #     data_folder = ctk.filedialog.askdirectory()
         
-    messagebox.showinfo('',"Model is training\nEstimated time : 150 seconds")
-    model = train_model(image_dir_0, image_dir_1,num_epochs=5)
+        
+    # image_dir_1 = os.path.abspath(f'./{data_folder}/signature/train/99')
+    # untrained_model_path = os.path.abspath(f'./{data_folder}/untrained_model.h5')
 
-    check_and_create_dir('.data/trained_model')
+    if os.path.isdir('./data') is False:
+        messagebox.showerror('Data not found','Select following datas manually : \n 1. class 1 images\n 2. Untrained model')
+        image_dir_1 = ctk.filedialog.askdirectory()
+        untrained_model_path = ctk.filedialog.askopenfilename()
+    else:
 
+        if os.path.isfile(untrained_model_path) is False:
+            messagebox.showerror('Untrained model not found',"Select Untrained model manually")
+            untrained_model_path = ctk.filedialog.askopenfilename()
+
+        if os.path.isdir(image_dir_1) is False:
+            messagebox.showerror('Class 1 image Data not found','Select class 1 image data manually ')
+            image_dir_1 = ctk.filedialog.askdirectory()
+            
+    epochs = 5 ##################################
+    messagebox.showinfo('',f"Model is training for {epochs}\nEstimated time : 150 seconds")
+
+    model = train_model(image_dir_0, image_dir_1,num_epochs=epochs, untrained_model_path=untrained_model_path)
+
+    model_save_path = os.path.abspath('./data/trained_model')
+    check_and_create_dir(model_save_path)
     model_name = f'{os.path.basename(image_dir_0)}vs{os.path.basename(image_dir_1)}'
+    model_path = f'{model_save_path}/{model_name}_epochs_{epochs}.h5'
+    model.save(model_path)
 
-    model.save(f'./data/trained_model/{model_name}.h5')
-
-    messagebox.showinfo('Training completes',f'Model saved as: .data/trained_model/{model_name}.h5')
+    messagebox.showinfo('Training completed',f'Model saved as: {model_path}')
+    os.startfile(model_save_path)
 
 def button2_command():# extract cheque
     filename = ctk.filedialog.askopenfilename()
