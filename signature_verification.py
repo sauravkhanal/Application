@@ -109,9 +109,15 @@ def button1_command():# train model
     os.startfile(model_save_path)
 
 def button2_command():# extract cheque
-    filename = ctk.filedialog.askopenfilename()
-    extract_data_from_cheque(filename,save_path='./data', folder_given = True)
-    messagebox.showinfo('','Extraction completed')
+    filepath = ctk.filedialog.askopenfilename()
+    save_path = os.path.abspath('./data/scanned_cheques')
+
+    if os.path.isdir(save_path) is False:
+        save_path = os.path.dirname(filepath)
+
+    extract_data_from_cheque(filepath,save_path=save_path, folder_given = True)
+    #messagebox.showinfo('','Extraction completed')
+    os.startfile(save_path)
 
 
 def test_model_selection(trained_model_name):
