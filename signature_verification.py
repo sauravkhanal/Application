@@ -126,9 +126,22 @@ def test_model_selection(trained_model_name):
 
     ctk.CTkLabel(root,text = 'Select user to test').grid(row = 4, column = 1)
 
-    trained_model_path = os.path.join('./data/trained_model',trained_model_name)
+    if not os.path.exists('./data/trained_model'):
+        messagebox.showerror('Path error', 'Trained model paths not found.\n select manually')
+        trained_model_folder = ctk.filedialog.askdirectory()
 
-    reference_image = os.path.join('./data/signature/train',trained_model_name.split('vs')[0],'sign1.png')
+    else:
+        trained_model_folder= ('./data/trained_model')
+
+    trained_model_path = os.path.join(trained_model_folder,trained_model_name)
+
+    if not os.path.exists(os.path.abspath('./data/signature/train')):
+        messagebox.showerror('Path error', 'Reference image directory not found.\n select directory manually')
+        reference_image_folder = ctk.filedialog.askdirectory()
+    else:
+        reference_image_folder = os.path.abspath('./data/signature/train')
+
+    reference_image = os.path.join(reference_image_folder,trained_model_name.split('vs')[0],'sign1.png')
 
     if os.path.isfile(reference_image) is False:
         messagebox.showwarning('file not found', 'path: ' + reference_image)
@@ -142,7 +155,12 @@ def test_model_selection(trained_model_name):
 
 def button3_command(): # test signature
 
-    file_list = os.listdir('./data/trained_model')
+    trained_model_path = ('./data/trained_model')
+    if os.path.exists('./data/trained_model') is False and os.path.exists(os.path.abspath('./data/trained_model')) is False:
+        messagebox.showerror('Path error', 'Trained model paths not found.\n select manually')
+        trained_model_path = ctk.filedialog.askdirectory()
+    file_list = os.listdir(trained_model_path)
+
     option_box = ctk.CTkOptionMenu(root,
                                 values = file_list,
                                 button_color='green',
