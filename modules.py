@@ -12,8 +12,9 @@ from PIL import Image
 def extract_data_from_cheque(cheque_path :str, save_path, folder_given : False)->None:
     if folder_given is False:
        save_path = os.path.dirname(cheque_path)
-
-    folder_path = os.path.join(save_path,'extracted_cheque_details')
+    cheque_name = os.path.basename(cheque_path).split('.')[0]
+    
+    folder_path = os.path.join(save_path,f'extracted_from_{cheque_name}')
     
     cheque = cv2.imread(cheque_path)
     ch_size = (1494,700)
@@ -344,7 +345,7 @@ def make_paired_dataset(X, y):
 SIZE = 50
 image_size = (SIZE,SIZE)
 
-def train_model(image_folder_1:str, image_folder_2:str ,num_epochs :int = 3, untrained_model_path:str = './data/untrained_model.h5'):
+def train_model(image_folder_1:str, image_folder_2:str , untrained_model_path:str, num_epochs :int = 3):
     '''
     returns trained model for given dataset
     donot forget to save the model
